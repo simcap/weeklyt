@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/csv"
 	"flag"
+	"fmt"
 	"log"
 	"net/url"
 	"os"
@@ -53,12 +54,13 @@ func main() {
 			break
 		}
 
-		tweets = append(tweets, [2]string{date.Format(time.Stamp), tweet.Text})
+		weekDay := fmt.Sprintf("%s %d", date.Weekday(), date.Day())
+		tweets = append(tweets, [2]string{weekDay, tweet.Text})
 	}
 
 	w := csv.NewWriter(os.Stdout)
 
-	w.Write([]string{"date", "text"})
+	w.Write([]string{fmt.Sprintf("Last %d days", *sinceFlag), "Tweets"})
 
 	for _, tweet := range tweets {
 		w.Write(tweet[:])
